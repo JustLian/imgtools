@@ -1,11 +1,9 @@
 import sys
 import os
-from turtle import update
 from PyQt5 import uic, QtCore
-from PyQt5.QtGui import QPixmap, QMouseEvent
-from PyQt5.QtWidgets import QApplication, QFileDialog, QMainWindow, QMessageBox, QSpinBox, QLabel, QInputDialog
+from PyQt5.QtWidgets import QApplication, QFileDialog, QMainWindow, QInputDialog
 import utils, ui
-from PIL import Image, ImageFilter, ImageDraw
+from PIL import Image, ImageFilter
 
 
 if hasattr(QtCore.Qt, 'AA_EnableHighDpiScaling'):

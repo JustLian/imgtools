@@ -1,9 +1,8 @@
 import sys
 import os
-from PyQt5 import uic, QtCore
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QApplication, QFileDialog, QMainWindow, QSlider
-import utils, ui
+from PyQt5 import uic
+from PyQt5.QtWidgets import QMainWindow
+import utils
 from PIL import ImageDraw
 
 
