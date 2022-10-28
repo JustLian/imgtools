@@ -1,7 +1,7 @@
 import sys
 import os
 from PyQt5 import uic, QtCore
-from PyQt5.QtWidgets import QApplication, QFileDialog, QMainWindow, QInputDialog
+from PyQt5.QtWidgets import QApplication, QFileDialog, QMainWindow, QInputDialog, QPushButton
 import utils, ui
 from PIL import Image, ImageFilter
 
@@ -35,6 +35,7 @@ class ImgTools(QMainWindow):
         self.resize_btn.clicked.connect(self.resize_)
         self.blur_btn.clicked.connect(self.blur)
         self.crop_btn.clicked.connect(self.crop)
+        self.cc_btn.clicked.connect(self.color_correction)
 
 
     def image_check(self) -> bool:
@@ -46,6 +47,38 @@ class ImgTools(QMainWindow):
     def create_dialogs(self):
         self.resize_dialog = ui.Resize(self.resize_callback, self.img)
         self.crop_dialog = ui.Crop(self.crop_callback, self.img)
+        self.cc_dialog = ui.ColorCorrection(self.cc_callback, self.img)
+
+        # Linking events
+        self.resize_dialog.hideEvent = self.enable_buttons
+        self.crop_dialog.hideEvent = self.enable_buttons
+        self.cc_dialog.hideEvent = self.enable_buttons
+
+        self.resize_dialog.showEvent = self.disable_buttons
+        self.crop_dialog.showEvent = self.disable_buttons
+        self.cc_dialog.showEvent = self.disable_buttons
+    
+    def enable_buttons(self, _):
+        # When any dialog window hide all buttons will get enabled
+        self.load_btn.setEnabled(True)
+        self.convert_btn.setEnabled(True)
+        self.resize_btn.setEnabled(True)
+        self.optimize_btn.setEnabled(True)
+        self.crop_btn.setEnabled(True)
+        self.cc_btn.setEnabled(True)
+        self.blur_btn.setEnabled(True)
+        self.censore_btn.setEnabled(True)
+
+    def disable_buttons(self, _):
+        # When any dialog window show all buttons will get disabled
+        self.load_btn.setEnabled(False)
+        self.convert_btn.setEnabled(False)
+        self.resize_btn.setEnabled(False)
+        self.optimize_btn.setEnabled(False)
+        self.crop_btn.setEnabled(False)
+        self.cc_btn.setEnabled(False)
+        self.blur_btn.setEnabled(False)
+        self.censore_btn.setEnabled(False)
 
     def load_image(self):
         '''Loading image'''
@@ -181,6 +214,23 @@ class ImgTools(QMainWindow):
         self.img = self.crop_dialog.old_img.crop(box)
         utils.update_image(self)
         self.statusBar().showMessage('Cropped image')
+    
+    def color_correction(self):
+        '''CC Image'''
+
+        if not self.image_check():
+            return
+        
+        self.create_dialogs()
+        self.cc_dialog.show()
+        self.statusBar().showMessage('Correct everything you need and press "Apply!"')
+    
+    def cc_callback(self):
+        self.cc_dialog.hide()
+
+        self.img = self.cc_dialog.img.copy()
+        utils.update_image(self)
+        self.statusBar().showMessage('Color correction applied!')
 
 
 
