@@ -1,12 +1,14 @@
 from PIL import Image
 from PyQt5.QtGui import QImage, QPixmap
+from PyQt5.QtWidgets import QMainWindow
 import typing as t
 
 
-def update_image(self):
-    size = resize_img(self.img, self.image.size().width(), self.image.size().height())
-    self.pixmap = pil2pixmap(self.img.resize(size))
-    self.image.setPixmap(self.pixmap)
+class BaseWindow(QMainWindow):
+    def update_image(self):
+        size = resize_img(self.img, self.image.size().width(), self.image.size().height())
+        self.pixmap = pil2pixmap(self.img.resize(size))
+        self.image.setPixmap(self.pixmap)
 
 
 def pil2pixmap(im: Image.Image) -> QPixmap:

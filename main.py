@@ -17,10 +17,10 @@ SUPPORTED_FORMATS = ['jpg', 'png', 'bmp', 'jpeg', 'webp']
 
 def load_image(self, path):
         self.img = Image.open(path)
-        utils.update_image(self)
+        self.update_image()
 
 
-class ImgTools(QMainWindow):
+class ImgTools(utils.BaseWindow):
     def __init__(self):
         super().__init__()
         self.img: Image.Image = None
@@ -38,6 +38,7 @@ class ImgTools(QMainWindow):
         self.crop_btn.clicked.connect(self.crop)
         self.cc_btn.clicked.connect(self.color_correction)
         self.optimize_btn.clicked.connect(self.optimize)
+        self.censore_btn.clicked.connect(self.censore)
 
     def image_check(self) -> bool:
         if self.img is None:
@@ -49,15 +50,18 @@ class ImgTools(QMainWindow):
         self.resize_dialog = ui.Resize(self.resize_callback, self.img)
         self.crop_dialog = ui.Crop(self.crop_callback, self.img)
         self.cc_dialog = ui.ColorCorrection(self.cc_callback, self.img)
+        self.censore_dialog = ui.Censore(self.censore_callback, self.img)
 
         # Linking events
         self.resize_dialog.hideEvent = self.enable_buttons
         self.crop_dialog.hideEvent = self.enable_buttons
         self.cc_dialog.hideEvent = self.enable_buttons
+        self.censore_dialog.hideEvent = self.enable_buttons
 
         self.resize_dialog.showEvent = self.disable_buttons
         self.crop_dialog.showEvent = self.disable_buttons
         self.cc_dialog.showEvent = self.disable_buttons
+        self.censore_dialog.showEvent = self.disable_buttons
     
     def enable_buttons(self, _):
         # When any dialog window hide all buttons will get enabled
@@ -182,7 +186,7 @@ class ImgTools(QMainWindow):
             else:
                 self.img = self.img.resize((w2, h2))
         
-        utils.update_image(self)
+        self.update_image()
         self.statusBar().showMessage('Image resized!')
     
     def blur(self):
@@ -202,7 +206,7 @@ class ImgTools(QMainWindow):
                 ImageFilter.GaussianBlur(radius)
             )
             self.statusBar().showMessage('Blurred image with blur radius %s' % radius)
-            utils.update_image(self)
+            self.update_image()
             return
 
         self.statusBar().showMessage('Image blur aborted')
@@ -229,8 +233,27 @@ class ImgTools(QMainWindow):
             box[1], box[3] = box[3], box[1]
 
         self.img = self.crop_dialog.old_img.crop(box)
-        utils.update_image(self)
+        self.update_image()
         self.statusBar().showMessage('Cropped image')
+
+    def censore(self):
+        '''Censore image'''
+
+        if not self.image_check():
+            return
+
+        self.create_dialogs()
+        self.censore_dialog.show()
+        self.statusBar().showMessage('Choose part of image to censor')
+    
+    def censore_callback(self, _):
+        self.censore_dialog.hide()
+        
+        self.censore_dialog.preview()
+        self.img = self.censore_dialog.img.copy()
+
+        self.update_image()
+        self.statusBar().showMessage('Censored image')
     
     def color_correction(self):
         '''CC Image'''
@@ -246,7 +269,7 @@ class ImgTools(QMainWindow):
         self.cc_dialog.hide()
 
         self.img = self.cc_dialog.img.copy()
-        utils.update_image(self)
+        self.update_image()
         self.statusBar().showMessage('Color correction applied!')
 
 
