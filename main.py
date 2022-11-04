@@ -24,6 +24,7 @@ class ImgTools(QMainWindow):
     def __init__(self):
         super().__init__()
         self.img: Image.Image = None
+        self.optimized = False
         self.initUI()
 
     def initUI(self):
@@ -36,7 +37,7 @@ class ImgTools(QMainWindow):
         self.blur_btn.clicked.connect(self.blur)
         self.crop_btn.clicked.connect(self.crop)
         self.cc_btn.clicked.connect(self.color_correction)
-
+        self.optimize_btn.clicked.connect(self.optimize)
 
     def image_check(self) -> bool:
         if self.img is None:
@@ -80,6 +81,18 @@ class ImgTools(QMainWindow):
         self.blur_btn.setEnabled(False)
         self.censore_btn.setEnabled(False)
 
+    def optimize(self):
+        '''Optimize image'''
+        if not self.image_check():
+            return
+
+        self.optimized = not self.optimized
+        if self.optimized:
+            self.statusBar().showMessage('Image will be optimized on save')
+        else:
+            self.statusBar().showMessage('Image will be saved without optimization')
+
+
     def load_image(self):
         '''Loading image'''
 
@@ -121,10 +134,14 @@ class ImgTools(QMainWindow):
         )
         if ok_pressed:
             fn = '%s.%s' % (nfn, ff)
-            self.img.save(os.path.join(
-                self.fp,
-                fn
-            ))
+            self.img.save(
+                os.path.join(
+                    self.fp,
+                    fn
+                ),
+                quality=90 if self.optimized else 100,
+                optimize=self.optimized
+            )
             self.statusBar().showMessage('Saved converted file: %s' % (
                 utils.format_path(os.path.join(
                     self.fp, fn

@@ -78,19 +78,19 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="resize_btn">
+        <widget class="QPushButton" name="optimize_btn">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <property name="text">
-          <string>Resize</string>
+          <string>Optimize</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="optimize_btn">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
+        <widget class="QPushButton" name="resize_btn">
          <property name="text">
-          <string>Optimize</string>
+          <string>Resize</string>
          </property>
         </widget>
        </item>
