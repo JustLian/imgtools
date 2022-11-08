@@ -105,13 +105,6 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
-        <widget class="QPushButton" name="preview_btn">
-         <property name="text">
-          <string>Preview</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QPushButton" name="apply_btn">
          <property name="text">
           <string>Apply!</string>

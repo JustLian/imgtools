@@ -5,6 +5,7 @@ import typing as t
 
 
 class BaseWindow(QMainWindow):
+    '''QMainWindow class w/ method for updating self.img PIL Image'''
     def update_image(self):
         size = resize_img(self.img, self.image.size().width(), self.image.size().height())
         self.pixmap = pil2pixmap(self.img.resize(size))
