@@ -7,8 +7,8 @@ A tool for image manipulations like crop, resize, convert, etc.
 ### Features
 - [x] Save (Convert)
 - [x] Resize
-- [ ] Optimize
+- [x] Optimize
 - [x] Crop
-- [ ] Color correction
+- [x] Color correction
 - [x] Blur
-- [ ] Censore
+- [x] Censore
